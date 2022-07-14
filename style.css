@@ -15,15 +15,6 @@ body {
     min-height: 100vh;
 }
 
-/*
-#header {
-    grid-area: header;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;   
-}*/
-
 #main {
     grid-area: main;
 }
@@ -109,4 +100,81 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 25px;  
+}
+
+#gridContainer{
+    height: 100%;
+    display: none;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+#gridImage{
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    padding-right: 30px;
+}
+
+#gridImage img {
+    height: 600px;
+    justify-self: center;
+    align-self: center;
+}
+
+#grid {
+    height: 390px;
+    width: 507px;
+    position: absolute;
+    
+    top: 70px;
+    left: 98px;
+    display: grid;
+    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+    
+    grid-template-areas: 
+    "grid1 grid2 grid3"
+    "grid4 grid5 grid6"
+    "grid7 grid8 grid9"; 
+}
+
+.gridItem{
+    border: 1px solid black;
+}
+
+#item1{
+    grid-area: grid1;
+}
+
+#item2{
+    grid-area: grid2;
+}
+
+#item3{
+    grid-area: grid3;
+}
+
+#item4{
+    grid-area: grid4;
+}
+
+#item5{
+    grid-area: grid5;
+}
+
+#item6{
+    grid-area: grid6;
+}
+
+#item7{
+    grid-area: grid7;
+}
+
+#item8{
+    grid-area: grid8;
+}
+
+#item9{
+    grid-area: grid9;
 }
