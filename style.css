@@ -7,7 +7,7 @@
 
 body {
     display: grid;
-    grid-template-rows: 100px 1fr 30px;
+    grid-template-rows: 150px 1fr 30px;
     grid-template-areas: 
     "header"
     "main"
@@ -15,37 +15,98 @@ body {
     min-height: 100vh;
 }
 
+/*
 #header {
     grid-area: header;
     display: flex;
     justify-content: center;
-    align-items:flex-end;
-    font-size: 30px;
-    border: 1px solid red;
-}
+    align-items: center;
+    font-size: 30px;   
+}*/
 
 #main {
     grid-area: main;
-    border: 1px solid blue;
 }
 
 #footer {
     grid-area: footer;
-    border: 1px solid green;
+    
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding-right: 20px;
+    padding-bottom: 20px;
 }
 
-#playerChoice {
+#mainMenu {
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 100px;
+    padding-bottom: 100px;
 }
 
+#firstChoice {
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+}
 
+.button {
+    border: 1px solid;
+    box-shadow: 5px 10px;
+    padding: 10px;
+    border-radius: 30px;
+    font-size: 30px;
+    user-select: none;
+    width: 200px;
+    text-align: center;
+}
 
+#two:hover {
+    background-image: url("pictures/multiplayer.png");
+    background-size: 90px;
+    background-repeat: no-repeat;
+}
 
+#one:hover {
+    background-image: url("pictures/singleplayer.png");
+    background-size: 70px;
+    background-repeat: no-repeat;
+}
+
+#title {
+    position: relative;
+}
+
+.clock {
+    position: absolute;
+    top: -100px;
+    left: -70px;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.7s, opacity 0.7s linear;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.7s ease-in;
+}
+
+.noClick {
+    pointer-events: none;
+}
+
+#banner{
+    grid-area: header;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;  
+}
