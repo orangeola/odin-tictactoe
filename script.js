@@ -44,12 +44,54 @@ const gameBoard = (() => {
                 let cloneo = blueCircle.cloneNode(true);
                 document.getElementById("item" + index).appendChild(cloneo);
             }
-            return "valid";
+            //return "valid";
+            let result = checkForWin(xo);
+            if(result === true)
+            {
+                return "finish";
+            }
+            else{
+                return "valid";
+            }
         }
-        //check if array slot is empty 
-        //if not, return invalid
-        //if empty, set slot in array to letter
-        //attach img to child of index
+    }
+
+    function checkForWin(xo)
+    {
+        let diag2 = 0;   
+        for(let i = 0; i < 3; i++)
+        {
+            let total = 0;
+            let total2 = 0;
+            let diag1 = 0;
+            for(let k = 0; k < 3; k++)
+            {
+                if(board[i][k] === xo)
+                {
+                    total++;
+                }
+                if(board[k][i] === xo)
+                {
+                    total2++;
+                }
+                if(board[k][k] === xo)
+                {
+                    diag1++;
+                }
+                if(i+k === 2)
+                {
+                    if(board[i][k] === xo)
+                    {
+                        diag2++;
+                    } 
+                }
+            }
+            if(total === 3 || total2 === 3 || diag1 === 3 || diag2 === 3)
+            {
+                return "finish";
+            }
+        }
+        return false;
     }
 
     function initPlayers(name1, piece1, name2, piece2)
@@ -93,11 +135,6 @@ const gameFlow = (() => {
         }
     })();
 
-    /*
-    gridItem1.addEventListener('click', ()=>{
-        gridItem1.appendChild(blueCircle);
-    });*/
-
     function askForMove(location, xo, index) {
         if(finished === false)
         {
@@ -108,6 +145,7 @@ const gameFlow = (() => {
                   break;
                 case "valid":
                   // set player tag at top to 1 -> 2 or reverse
+                  // set playerTurn to other letter x->o
                   if(playerTurn === "x")
                   {
                     playerTurn = "o";
@@ -118,12 +156,8 @@ const gameFlow = (() => {
                     playerTurn = "x";
                     playerBanner.innerText = "Player 1's turn";
                   }
-                  // set playerTurn to other letter x->o
                   break;
-                case "invalid":
-                  // do nothing pretty much
-                  break;
-              } 
+            } 
         }
     }
 
