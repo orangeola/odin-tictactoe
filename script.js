@@ -190,7 +190,9 @@ const gameFlow = (() => {
     }
 
     function optionOnePlayer(){
-        alert("Under Construction");
+        let newButtons = document.getElementsByClassName("secondChoice");
+        newButtons[0].style.display = "flex";
+        newButtons[1].style.display = "flex";
     }
 
     function restart()
