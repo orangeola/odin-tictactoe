@@ -117,7 +117,7 @@ body {
     padding-right: 30px;
 }
 
-#gridImage img {
+#paintBG {
     height: 600px;
     justify-self: center;
     align-self: center;
@@ -141,6 +141,13 @@ body {
 
 .gridItem{
     border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gridItem > img {
+    height: 81px;
 }
 
 #item1{
