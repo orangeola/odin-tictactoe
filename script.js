@@ -41,8 +41,10 @@ const gameBoard = (() => {
             } 
             else
             {
-                document.getElementById("item" + index).appendChild(blueCircle);
+                let cloneo = blueCircle.cloneNode(true);
+                document.getElementById("item" + index).appendChild(cloneo);
             }
+            return "valid";
         }
         //check if array slot is empty 
         //if not, return invalid
@@ -73,6 +75,7 @@ const gameFlow = (() => {
     const onePlayer = document.getElementById("one");
     const banban = document.getElementById("banner");
     const grid = document.getElementById("gridContainer");
+    const playerBanner = document.getElementById("playerBanner");
     
     (function(){
         let total = 1;
@@ -83,7 +86,7 @@ const gameFlow = (() => {
                 let temp = "item" + total;
                 console.log(temp);
                 document.getElementById(temp).addEventListener('click', ()=>{
-                let nextTurn = gameBoard.makeMove((i.toString() + k.toString()), playerTurn, temp[4]);
+                let nextTurn = askForMove((i.toString() + k.toString()), playerTurn, temp[4]);
             });
             total++;
             }
@@ -105,6 +108,16 @@ const gameFlow = (() => {
                   break;
                 case "valid":
                   // set player tag at top to 1 -> 2 or reverse
+                  if(playerTurn === "x")
+                  {
+                    playerTurn = "o";
+                    playerBanner.innerText = "Player 2's turn";
+                  }
+                  else
+                  {
+                    playerTurn = "x";
+                    playerBanner.innerText = "Player 1's turn";
+                  }
                   // set playerTurn to other letter x->o
                   break;
                 case "invalid":
