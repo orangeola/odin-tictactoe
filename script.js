@@ -88,7 +88,7 @@ const gameBoard = (() => {
             }
             if(total === 3 || total2 === 3 || diag1 === 3 || diag2 === 3)
             {
-                return "finish";
+                return true;
             }
         }
         return false;
@@ -141,7 +141,15 @@ const gameFlow = (() => {
             let result = gameBoard.makeMove(location, xo, index);
             switch(result) {
                 case "finish":
-                  // code block
+                  finished = true;
+                  if(playerTurn === "x")
+                  {
+                    playerBanner.innerText = "Player 1 wins!";
+                  }
+                  else
+                  {
+                    playerBanner.innerText = "Player 2 wins!";
+                  }
                   break;
                 case "valid":
                   // set player tag at top to 1 -> 2 or reverse
