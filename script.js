@@ -16,6 +16,7 @@ const Player = (player, xo) => {
 }
 
 const gameBoard = (() => {
+    let filled = 0;
     let board = [
         ["empty", "empty", "empty"],
         ["empty", "empty", "empty"],
@@ -31,6 +32,7 @@ const gameBoard = (() => {
 
     function makeMove(location, xo, index)
     {
+        filled++;
         if(board[location[0]][location[1]] === "empty")
         {
             board[location[0]][location[1]] = xo;
@@ -47,7 +49,14 @@ const gameBoard = (() => {
                 return "finish";
             }
             else{
-                return "valid";
+                if(filled === 9)
+                {
+                    return "tie"
+                }
+                else
+                {
+                    return "valid";
+                }
             }
         }
     }
@@ -104,6 +113,7 @@ const gameBoard = (() => {
 
     function emptyGrid()
     {
+        filled = 0;
         for(let i = 0; i < 3; i++)
         {
             for(let k = 0; k < 3; k++)
@@ -174,6 +184,11 @@ const gameFlow = (() => {
                     playerTurn = "x";
                     playerBanner.innerText = "Player 1's turn";
                   }
+                  break;
+                case "tie":
+                  finished = true;
+                  playerBanner.style.color = "brown";
+                  playerBanner.innerText = "Tie!";
                   break;
             } 
         }
