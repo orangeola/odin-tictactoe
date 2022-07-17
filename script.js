@@ -36,17 +36,13 @@ const gameBoard = (() => {
             board[location[0]][location[1]] = xo;
             if(xo === "x")
             {
-                let clonex = redEx.cloneNode(true);
-                document.getElementById("item" + index).appendChild(clonex);
+                document.getElementById("item" + index).appendChild(redEx.cloneNode(true));
             } 
             else
             {
-                let cloneo = blueCircle.cloneNode(true);
-                document.getElementById("item" + index).appendChild(cloneo);
+                document.getElementById("item" + index).appendChild(blueCircle.cloneNode(true));
             }
-            //return "valid";
-            let result = checkForWin(xo);
-            if(result === true)
+            if(checkForWin(xo) === true)
             {
                 return "finish";
             }
@@ -105,12 +101,13 @@ const gameBoard = (() => {
             this.player2 = Player(name2, piece2);
         }
     }
-    return {player1, player2, initPlayers, makeMove, board}
+    return {initPlayers, makeMove}
 })();
 
 const gameFlow = (() => {
     let playerTurn = "x";
     let finished = false;
+    let presentAI = false;
 
     const mainMenu = document.getElementById("mainMenu");
     const twoPlayer = document.getElementById("two");
@@ -118,6 +115,9 @@ const gameFlow = (() => {
     const banban = document.getElementById("banner");
     const grid = document.getElementById("gridContainer");
     const playerBanner = document.getElementById("playerBanner");
+
+    const gridButton1 = document.getElementById("gridB1");
+    const gridButton2 = document.getElementById("gridB2");
     
     (function(){
         let total = 1;
@@ -126,7 +126,6 @@ const gameFlow = (() => {
             for(let k = 0; k < 3; k++)
             {
                 let temp = "item" + total;
-                console.log(temp);
                 document.getElementById(temp).addEventListener('click', ()=>{
                 let nextTurn = askForMove((i.toString() + k.toString()), playerTurn, temp[4]);
             });
@@ -141,6 +140,7 @@ const gameFlow = (() => {
             let result = gameBoard.makeMove(location, xo, index);
             switch(result) {
                 case "finish":
+                  playerBanner.style.color = "lightgreen";
                   finished = true;
                   if(playerTurn === "x")
                   {
@@ -152,8 +152,6 @@ const gameFlow = (() => {
                   }
                   break;
                 case "valid":
-                  // set player tag at top to 1 -> 2 or reverse
-                  // set playerTurn to other letter x->o
                   if(playerTurn === "x")
                   {
                     playerTurn = "o";
@@ -171,6 +169,28 @@ const gameFlow = (() => {
 
     twoPlayer.addEventListener('click', optionTwoPlayer);
     onePlayer.addEventListener('click', optionOnePlayer);
+    gridButton1.addEventListener('click', restart);
+    gridButton2.addEventListener('click', menu);
+
+    function optionTwoPlayer(){
+        menuTransition();
+        gameBoard.initPlayers("human", "x", "human", "o");
+    }
+
+    function optionOnePlayer(){
+        alert("Under Construction");
+        //presentAI = true;
+        //menuTransition();
+    }
+
+    function restart()
+    {
+    }
+
+    function menu()
+    {
+        location.reload();
+    }
 
     function menuTransition(){
         setTimeout(function(){ 
@@ -184,14 +204,5 @@ const gameFlow = (() => {
             banban.classList.add("visible");
             grid.classList.add("visible");
         }, 720);
-    }
-
-    function optionTwoPlayer(){
-        menuTransition();
-        gameBoard.initPlayers("human", "x", "human", "o");
-    }
-
-    function optionOnePlayer(){
-        alert("Under Construction") ;
     }
 })();
