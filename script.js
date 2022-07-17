@@ -101,7 +101,19 @@ const gameBoard = (() => {
             this.player2 = Player(name2, piece2);
         }
     }
-    return {initPlayers, makeMove}
+
+    function emptyGrid()
+    {
+        for(let i = 0; i < 3; i++)
+        {
+            for(let k = 0; k < 3; k++)
+            {
+                board[i][k] = "empty";
+            }
+        }
+    }
+
+    return {initPlayers, makeMove, emptyGrid}
 })();
 
 const gameFlow = (() => {
@@ -179,12 +191,27 @@ const gameFlow = (() => {
 
     function optionOnePlayer(){
         alert("Under Construction");
-        //presentAI = true;
-        //menuTransition();
     }
 
     function restart()
     {
+        playerBanner.style.color = "black";
+        gameBoard.emptyGrid();
+        const allGridItems = document.getElementsByClassName("gridItem"); 
+        for(const item in allGridItems)
+        {
+            for(let i = 0; i < allGridItems.length; i++)
+            {
+                allGridItems[i].textContent = "";
+            }
+        }
+
+        playerTurn = "x";
+        finished = false;
+        if(!presentAI)
+        {
+            playerBanner.innerText = "Player 1's turn";
+        }
     }
 
     function menu()
