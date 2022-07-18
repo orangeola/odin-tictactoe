@@ -32,11 +32,10 @@ const gameBoard = (() => {
     function makeMove(xo, index)
     {
         filled++;
-        let arrayIndex = index-1;
-        console.log(filled);
-        if(board[arrayIndex] === "empty")
+        //let arrayIndex = index-1;
+        if(board[index] === "empty")
         {
-            board[arrayIndex] = xo;
+            board[index] = xo;
             if(xo === "x")
             {
                 document.getElementById("item" + index).appendChild(redEx.cloneNode(true));
@@ -98,15 +97,27 @@ const gameBoard = (() => {
         filled = 0;
     }
 
-    function robotCalc(difficulty)
+    function robotCalc()
     {
-        if(difficulty === "easy")
+        if(this.difficulty === "easy")
         {
-
+            let validSpaces = [];
+            for(let i = 0; i < board.length; i++)
+            {
+                if(board[i] === "empty")
+                {
+                    validSpaces.push(i);
+                }
+            }
+            let result = Math.floor(Math.random() * validSpaces.length);
+            console.log(result);
+            console.log(validSpaces[result]);
+            console.log(validSpaces);
+            return validSpaces[result];
         }
     }
 
-    return {initPlayers, makeMove, emptyGrid}
+    return {initPlayers, makeMove, emptyGrid, robotCalc, player1, player2, board}
 })();
 
 const gameFlow = (() => {
@@ -127,13 +138,12 @@ const gameFlow = (() => {
     const gridButton2 = document.getElementById("gridB2");
     
     (function(){
-        let total = 1;
+        let total = 0;
         for(let i = 0; i < 9; i++)
         {
                 let temp = "item" + total;
-                console.log(temp);
                 document.getElementById(temp).addEventListener('click', ()=>{
-                let nextTurn = askForMove(playerTurn, temp[4]);
+                askForMove(playerTurn, temp[4]);
             });
             total++;
         }
@@ -141,8 +151,7 @@ const gameFlow = (() => {
 
     function robotTurn()
     {
-        console.log("yay");
-        gameBoard.robotCalc();
+        askForMove(playerTurn, gameBoard.robotCalc());
     }
 
     function askForMove(xo, index) {
@@ -167,11 +176,19 @@ const gameFlow = (() => {
                   {
                     playerTurn = "o";
                     playerBanner.innerText = "Player 2's turn";
+                    if(gameBoard.player2.getType() === "ai")
+                    {
+                        robotTurn();
+                    }
                   }
                   else
                   {
                     playerTurn = "x";
                     playerBanner.innerText = "Player 1's turn";
+                    if(gameBoard.player1.getType() === "ai")
+                    {
+                        robotTurn();
+                    }
                   }
                   break;
                 case "tie":
@@ -188,7 +205,6 @@ const gameFlow = (() => {
     gridButton1.addEventListener('click', restart);
     gridButton2.addEventListener('click', menu);
 
-    console.log((spOptions1));
     for(let i = 0; i < spOptions1.length; i++)
     {
         spOptions1[i].addEventListener('click', ()=>{
@@ -263,7 +279,7 @@ const gameFlow = (() => {
     function onePlayerChosen(difficulty, order){
         menuTransition();
         playerBanner.innerText = "Robots are evil";
-        this.presentAI = true;
+        presentAI = true;
         if(order === "playx"){
             gameBoard.initPlayers("human", "x", "ai", "o", difficulty);
         } else {
@@ -290,7 +306,11 @@ const gameFlow = (() => {
         if(!presentAI)
         {
             playerBanner.innerText = "Player 1's turn";
-        }
+        } 
+        else
+        {
+            robotTurn();
+        } 
     }
 
     function menu()

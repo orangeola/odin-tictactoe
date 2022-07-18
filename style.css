@@ -166,9 +166,9 @@ body {
     grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
     
     grid-template-areas: 
-    "grid1 grid2 grid3"
-    "grid4 grid5 grid6"
-    "grid7 grid8 grid9"; 
+    "grid0 grid1 grid2"
+    "grid3 grid4 grid5"
+    "grid6 grid7 grid8"; 
 }
 
 .gridItem{
@@ -180,6 +180,10 @@ body {
 
 .gridItem > img {
     height: 81px;
+}
+
+#item0{
+    grid-area: grid0;
 }
 
 #item1{
@@ -212,10 +216,6 @@ body {
 
 #item8{
     grid-area: grid8;
-}
-
-#item9{
-    grid-area: grid9;
 }
 
 #secondChoice, #thirdChoice {
