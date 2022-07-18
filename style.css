@@ -218,7 +218,7 @@ body {
     grid-area: grid9;
 }
 
-.secondChoice {
+#secondChoice, #thirdChoice {
     display: none;
     flex-direction: row;
     gap: 100px;
@@ -239,3 +239,9 @@ body {
     background-color: black;
     color: white;
 }
+
+.chosen {
+    background-color: black;
+    color: white;
+}
+
