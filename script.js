@@ -17,11 +17,9 @@ const Player = (player, xo) => {
 
 const gameBoard = (() => {
     let filled = 0;
-    let board = [
-        ["empty", "empty", "empty"],
-        ["empty", "empty", "empty"],
-        ["empty", "empty", "empty"]
-    ]
+    let board = ["empty", "empty", "empty", 
+    "empty", "empty", "empty", 
+    "empty", "empty", "empty"];
     let player1;
     let player2;
     let difficulty;
@@ -31,12 +29,14 @@ const gameBoard = (() => {
     let redEx = document.createElement("img");
     redEx.src = "pictures/redX.png";
 
-    function makeMove(location, xo, index)
+    function makeMove(xo, index)
     {
         filled++;
-        if(board[location[0]][location[1]] === "empty")
+        let arrayIndex = index-1;
+        console.log(filled);
+        if(board[arrayIndex] === "empty")
         {
-            board[location[0]][location[1]] = xo;
+            board[arrayIndex] = xo;
             if(xo === "x")
             {
                 document.getElementById("item" + index).appendChild(redEx.cloneNode(true));
@@ -64,39 +64,18 @@ const gameBoard = (() => {
 
     function checkForWin(xo)
     {
-        let diag2 = 0;   
-        for(let i = 0; i < 3; i++)
-        {
-            let total = 0;
-            let total2 = 0;
-            let diag1 = 0;
-            for(let k = 0; k < 3; k++)
-            {
-                if(board[i][k] === xo)
-                {
-                    total++;
-                }
-                if(board[k][i] === xo)
-                {
-                    total2++;
-                }
-                if(board[k][k] === xo)
-                {
-                    diag1++;
-                }
-                if(i+k === 2)
-                {
-                    if(board[i][k] === xo)
-                    {
-                        diag2++;
-                    } 
-                }
-            }
-            if(total === 3 || total2 === 3 || diag1 === 3 || diag2 === 3)
-            {
+        if (
+            (board[0] === xo && board[1] === xo && board[2] === xo) ||
+            (board[3] === xo && board[4] === xo && board[5] === xo) ||
+            (board[6] === xo && board[7] === xo && board[8] === xo) ||
+            (board[0] === xo && board[3] === xo && board[6] === xo) ||
+            (board[1] === xo && board[4] === xo && board[7] === xo) ||
+            (board[2] === xo && board[5] === xo && board[8] === xo) ||
+            (board[0] === xo && board[4] === xo && board[8] === xo) ||
+            (board[2] === xo && board[4] === xo && board[6] === xo)
+            ){
                 return true;
             }
-        }
         return false;
     }
 
@@ -115,13 +94,15 @@ const gameBoard = (() => {
 
     function emptyGrid()
     {
+        board.fill("empty");
         filled = 0;
-        for(let i = 0; i < 3; i++)
+    }
+
+    function robotCalc(difficulty)
+    {
+        if(difficulty === "easy")
         {
-            for(let k = 0; k < 3; k++)
-            {
-                board[i][k] = "empty";
-            }
+
         }
     }
 
@@ -147,23 +128,27 @@ const gameFlow = (() => {
     
     (function(){
         let total = 1;
-        for(let i = 0; i < 3; i++)
+        for(let i = 0; i < 9; i++)
         {
-            for(let k = 0; k < 3; k++)
-            {
                 let temp = "item" + total;
+                console.log(temp);
                 document.getElementById(temp).addEventListener('click', ()=>{
-                let nextTurn = askForMove((i.toString() + k.toString()), playerTurn, temp[4]);
+                let nextTurn = askForMove(playerTurn, temp[4]);
             });
             total++;
-            }
         }
     })();
 
-    function askForMove(location, xo, index) {
+    function robotTurn()
+    {
+        console.log("yay");
+        gameBoard.robotCalc();
+    }
+
+    function askForMove(xo, index) {
         if(finished === false)
         {
-            let result = gameBoard.makeMove(location, xo, index);
+            let result = gameBoard.makeMove(xo, index);
             switch(result) {
                 case "finish":
                   playerBanner.style.color = "lightgreen";
@@ -259,7 +244,7 @@ const gameFlow = (() => {
         }
         if(counter === 2)
         {
-            optionTwoPlayer(difficulty, order);
+            onePlayerChosen(difficulty, order);
         }
     }
     
@@ -277,14 +262,16 @@ const gameFlow = (() => {
 
     function onePlayerChosen(difficulty, order){
         menuTransition();
+        playerBanner.innerText = "Robots are evil";
+        this.presentAI = true;
         if(order === "playx"){
             gameBoard.initPlayers("human", "x", "ai", "o", difficulty);
         } else {
             gameBoard.initPlayers("ai", "x", "human", "o", difficulty);
+            robotTurn();
         }
     }
     
-
     function restart()
     {
         playerBanner.style.color = "black";
