@@ -43,20 +43,8 @@ const gameBoard = (() => {
             {
                 document.getElementById("item" + index).appendChild(blueCircle.cloneNode(true));
             }
-            if(checkForWin(xo) === true)
-            {
-                return "finish";
-            }
-            else{
-                if(filled === 9)
-                {
-                    return "tie"
-                }
-                else
-                {
-                    return "valid";
-                }
-            }
+            
+            return checkForWin(xo);
         }
     }
 
@@ -72,9 +60,19 @@ const gameBoard = (() => {
             (board[0] === xo && board[4] === xo && board[8] === xo) ||
             (board[2] === xo && board[4] === xo && board[6] === xo)
             ){
-                return true;
+                return "finish";
+            } 
+            else
+            {
+                if(filled === 9)
+                {
+                    return "tie"
+                }
+                else
+                {
+                    return "valid";
+                }
             }
-        return false;
     }
 
     function initPlayers(name1, piece1, name2, piece2, difficulty)
@@ -125,23 +123,23 @@ const gameBoard = (() => {
         {
             //impossible - minmax algo
             let bestScore = -Infinity;
-            let bestMove;
+            let move;
             for (let i = 0; i < 9; i++) {
                 if(board[i] === "empty") {
                     board[i] = playerTurn;
-                    let score = minimax(board);
+                    let score = minimax(board, 0, true);
                     board[i] = "empty";
                     if (score > bestScore) {
                         bestScore = score;
-                        bestMove = i;
+                        move = i;
                     }
                 }
             }
-            return bestMove;
+            return move;
         }
     }
 
-    function minimax(board) {
+    function minimax(board, depth, isMaximizing) {
         return 1;
     }
 
