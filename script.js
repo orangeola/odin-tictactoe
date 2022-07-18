@@ -32,7 +32,6 @@ const gameBoard = (() => {
     function makeMove(xo, index)
     {
         filled++;
-        //let arrayIndex = index-1;
         if(board[index] === "empty")
         {
             board[index] = xo;
@@ -97,7 +96,7 @@ const gameBoard = (() => {
         filled = 0;
     }
 
-    function robotCalc()
+    function robotCalc(playerTurn)
     {
         if(this.difficulty === "easy")
         {
@@ -115,6 +114,35 @@ const gameBoard = (() => {
             console.log(validSpaces);
             return validSpaces[result];
         }
+        else if(this.difficulty === "normal")
+        {
+            //normal
+            //plays like easy except tries to cut off 
+            //the enemies three if its about to happen
+            alert("Under Construction");
+        }
+        else
+        {
+            //impossible - minmax algo
+            let bestScore = -Infinity;
+            let bestMove;
+            for (let i = 0; i < 9; i++) {
+                if(board[i] === "empty") {
+                    board[i] = playerTurn;
+                    let score = minimax(board);
+                    board[i] = "empty";
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = i;
+                    }
+                }
+            }
+            return bestMove;
+        }
+    }
+
+    function minimax(board) {
+        return 1;
     }
 
     return {initPlayers, makeMove, emptyGrid, robotCalc, player1, player2, board}
@@ -151,7 +179,7 @@ const gameFlow = (() => {
 
     function robotTurn()
     {
-        askForMove(playerTurn, gameBoard.robotCalc());
+        askForMove(playerTurn, gameBoard.robotCalc(playerTurn));
     }
 
     function askForMove(xo, index) {
