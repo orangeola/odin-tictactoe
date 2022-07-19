@@ -16,7 +16,6 @@ const Player = (player, xo) => {
 }
 
 const gameBoard = (() => {
-    let filled = 0;
     let board = ["empty", "empty", "empty", 
     "empty", "empty", "empty", 
     "empty", "empty", "empty"];
@@ -53,7 +52,6 @@ const gameBoard = (() => {
 
     function checkForWin()
     {
-        filled++;
         let xo = "x";
         if (
             (board[0] === xo && board[1] === xo && board[2] === xo) ||
@@ -66,7 +64,7 @@ const gameBoard = (() => {
             (board[2] === xo && board[4] === xo && board[6] === xo)
             ){
                 return "x";
-            } 
+        } 
         xo = "o";
         if (
             (board[0] === xo && board[1] === xo && board[2] === xo) ||
@@ -79,7 +77,17 @@ const gameBoard = (() => {
             (board[2] === xo && board[4] === xo && board[6] === xo)
             ){
                 return "o";
-            } 
+        }
+        
+        let filled = 0;
+        for(let i = 0; i < board.length; i++)
+        {
+            if(board[i] !== "empty")
+            {
+                filled++;
+            }
+        }
+            
         if(filled === 9)
         {
             return "tie";
@@ -106,13 +114,6 @@ const gameBoard = (() => {
     function emptyGrid()
     {
         board.fill("empty");
-        filled = 0;
-    }
-
-    let scores = {
-        aiPlayer: 1,
-        humanPlayer: -1,
-        tie: 0
     }
 
     function robotCalc(playerTurn)
@@ -128,37 +129,30 @@ const gameBoard = (() => {
                 }
             }
             let result = Math.floor(Math.random() * validSpaces.length);
-            console.log(result);
-            console.log(validSpaces[result]);
-            console.log(validSpaces);
             return validSpaces[result];
         }
         else if(this.difficulty === "normal")
         {
-            //normal
-            //plays like easy except tries to cut off 
-            //the enemies three if its about to happen
             alert("Under Construction");
         }
         else
         {
-            //impossible - minmax algo
-            if(player1.getType() === "ai")
+            if(this.player1.getType() === "ai")
             {
-                aiPlayer = player1;
-                humanPlayer = player2;
+                aiPlayer = this.player1;
+                humanPlayer = this.player2;
             }
             else
             {
-                aiPlayer = player2;
-                humanPlayer = player1;
+                aiPlayer = this.player2;
+                humanPlayer = this.player1;
             }
             let bestScore = -Infinity;
             let move;
             for (let i = 0; i < 9; i++) {
                 if(board[i] === "empty") {
-                    board[i] = playerTurn;
-                    let score = minimax(board, 0, true);
+                    board[i] = aiPlayer.getPiece();
+                    let score = minimax(board, 0, false);
                     board[i] = "empty";
                     if (score > bestScore) {
                         bestScore = score;
@@ -171,7 +165,48 @@ const gameBoard = (() => {
     }
 
     function minimax(board, depth, isMaximizing) {
-        return 1;
+        let result = checkForWin();
+        if(result !== "valid")
+        {
+            if(result === aiPlayer.getPiece())
+            {
+                return 1;
+            } 
+            else if(result === humanPlayer.getPiece())
+            {
+                return -1; 
+            }
+            else 
+            {
+                return 0;
+            }
+            
+        }
+
+        if(isMaximizing)
+        {
+            let bestScore = -Infinity;
+            for (let i = 0; i < 9; i++) {
+                if(board[i] === "empty"){
+                    board[i] = aiPlayer.getPiece();
+                    let score = minimax(board, depth+1, false);
+                    board[i] = "empty";
+                    bestScore = Math.max(score, bestScore);
+                }
+            }
+            return bestScore;
+        } else {
+            let bestScore = Infinity;
+            for (let i = 0; i < 9; i++) {
+                if(board[i] === "empty"){
+                    board[i] = humanPlayer.getPiece();
+                    let score = minimax(board, depth+1, true);
+                    board[i] = "empty";
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
     }
 
     return {initPlayers, makeMove, emptyGrid, robotCalc, player1, player2, board}
@@ -358,13 +393,13 @@ const gameFlow = (() => {
 
         playerTurn = "x";
         finished = false;
-        if(!presentAI)
+        if(gameBoard.player1.getType() === "ai")
         {
-            playerBanner.innerText = "Player 1's turn";
+            robotTurn();
         } 
         else
         {
-            robotTurn();
+            playerBanner.innerText = "Player 1's turn";
         } 
     }
 
