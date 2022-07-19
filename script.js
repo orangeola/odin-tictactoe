@@ -24,6 +24,10 @@ const gameBoard = (() => {
     let player2;
     let difficulty;
 
+    //for minmax
+    let aiPlayer;
+    let humanPlayer;
+
     const blueCircle = document.createElement("img");
     blueCircle.src = "pictures/blueO.png";
     let redEx = document.createElement("img");
@@ -31,7 +35,6 @@ const gameBoard = (() => {
 
     function makeMove(xo, index)
     {
-        filled++;
         if(board[index] === "empty")
         {
             board[index] = xo;
@@ -44,12 +47,14 @@ const gameBoard = (() => {
                 document.getElementById("item" + index).appendChild(blueCircle.cloneNode(true));
             }
             
-            return checkForWin(xo);
+            return checkForWin();
         }
     }
 
-    function checkForWin(xo)
+    function checkForWin()
     {
+        filled++;
+        let xo = "x";
         if (
             (board[0] === xo && board[1] === xo && board[2] === xo) ||
             (board[3] === xo && board[4] === xo && board[5] === xo) ||
@@ -60,19 +65,29 @@ const gameBoard = (() => {
             (board[0] === xo && board[4] === xo && board[8] === xo) ||
             (board[2] === xo && board[4] === xo && board[6] === xo)
             ){
-                return "finish";
+                return "x";
             } 
-            else
-            {
-                if(filled === 9)
-                {
-                    return "tie"
-                }
-                else
-                {
-                    return "valid";
-                }
-            }
+        xo = "o";
+        if (
+            (board[0] === xo && board[1] === xo && board[2] === xo) ||
+            (board[3] === xo && board[4] === xo && board[5] === xo) ||
+            (board[6] === xo && board[7] === xo && board[8] === xo) ||
+            (board[0] === xo && board[3] === xo && board[6] === xo) ||
+            (board[1] === xo && board[4] === xo && board[7] === xo) ||
+            (board[2] === xo && board[5] === xo && board[8] === xo) ||
+            (board[0] === xo && board[4] === xo && board[8] === xo) ||
+            (board[2] === xo && board[4] === xo && board[6] === xo)
+            ){
+                return "o";
+            } 
+        if(filled === 9)
+        {
+            return "tie";
+        }
+        else
+        {
+            return "valid";
+        }
     }
 
     function initPlayers(name1, piece1, name2, piece2, difficulty)
@@ -92,6 +107,12 @@ const gameBoard = (() => {
     {
         board.fill("empty");
         filled = 0;
+    }
+
+    let scores = {
+        aiPlayer: 1,
+        humanPlayer: -1,
+        tie: 0
     }
 
     function robotCalc(playerTurn)
@@ -122,6 +143,16 @@ const gameBoard = (() => {
         else
         {
             //impossible - minmax algo
+            if(player1.getType() === "ai")
+            {
+                aiPlayer = player1;
+                humanPlayer = player2;
+            }
+            else
+            {
+                aiPlayer = player2;
+                humanPlayer = player1;
+            }
             let bestScore = -Infinity;
             let move;
             for (let i = 0; i < 9; i++) {
@@ -185,17 +216,15 @@ const gameFlow = (() => {
         {
             let result = gameBoard.makeMove(xo, index);
             switch(result) {
-                case "finish":
+                case "x":
                   playerBanner.style.color = "lightgreen";
                   finished = true;
-                  if(playerTurn === "x")
-                  {
-                    playerBanner.innerText = "Player 1 wins!";
-                  }
-                  else
-                  {
-                    playerBanner.innerText = "Player 2 wins!";
-                  }
+                  playerBanner.innerText = "Player 1 wins!";
+                  break;
+                case "o":
+                  playerBanner.style.color = "lightgreen";
+                  finished = true;
+                  playerBanner.innerText = "Player 2 wins!";
                   break;
                 case "valid":
                   if(playerTurn === "x")
