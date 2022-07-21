@@ -133,11 +133,17 @@ const gameBoard = (() => {
         }
         else if(this.difficulty === "normal")
         {
-            alert("Under Construction");
+            return bestMove.call(this, 1);
         }
         else
         {
-            if(this.player1.getType() === "ai")
+            return bestMove.call(this, Infinity);
+        }
+    }
+
+    function bestMove(depthLimit)
+    {
+        if(this.player1.getType() === "ai")
             {
                 aiPlayer = this.player1;
                 humanPlayer = this.player2;
@@ -152,7 +158,7 @@ const gameBoard = (() => {
             for (let i = 0; i < 9; i++) {
                 if(board[i] === "empty") {
                     board[i] = aiPlayer.getPiece();
-                    let score = minimax(board, 0, false);
+                    let score = minimax(board, 0, false, depthLimit);
                     board[i] = "empty";
                     if (score > bestScore) {
                         bestScore = score;
@@ -161,12 +167,13 @@ const gameBoard = (() => {
                 }
             }
             return move;
-        }
     }
 
-    function minimax(board, depth, isMaximizing) {
+
+
+    function minimax(board, depth, isMaximizing, depthLimit) {
         let result = checkForWin();
-        if(result !== "valid")
+        if(result !== "valid" || depth === depthLimit)
         {
             if(result === aiPlayer.getPiece())
             {
@@ -189,7 +196,7 @@ const gameBoard = (() => {
             for (let i = 0; i < 9; i++) {
                 if(board[i] === "empty"){
                     board[i] = aiPlayer.getPiece();
-                    let score = minimax(board, depth+1, false);
+                    let score = minimax(board, depth+1, false, depthLimit);
                     board[i] = "empty";
                     bestScore = Math.max(score, bestScore);
                 }
@@ -200,7 +207,7 @@ const gameBoard = (() => {
             for (let i = 0; i < 9; i++) {
                 if(board[i] === "empty"){
                     board[i] = humanPlayer.getPiece();
-                    let score = minimax(board, depth+1, true);
+                    let score = minimax(board, depth+1, true, depthLimit);
                     board[i] = "empty";
                     bestScore = Math.min(score, bestScore);
                 }
